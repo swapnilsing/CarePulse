@@ -1,4 +1,4 @@
-# CarePulse
+✨CarePulse✨
 
 # Harnessing Machine Learning for Preventive HealthCare
 
