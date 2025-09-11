@@ -1,6 +1,6 @@
 # CarePulse
 
-## Presentation: Harnessing Machine Learning for Preventive HealthCare
+# Harnessing Machine Learning for Preventive HealthCare
 
 CarePulse is an innovative platform designed to leverage the power of Machine Learning (ML) to revolutionize preventive healthcare. By analyzing health data and patterns, CarePulse aims to provide early detection, personalized recommendations, and proactive interventions to improve overall well-being.
 
