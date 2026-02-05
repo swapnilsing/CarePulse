@@ -1,35 +1,93 @@
-// server/server.js
-
 const express = require('express');
 const cors = require('cors');
-// const mongoose = require('mongoose'); // You'll use this later to connect to MongoDB
 
 const app = express();
-const PORT = process.env.PORT || 5001; // Use a different port than React
+const PORT = process.env.PORT || 5001;
 
-// Middleware
 app.use(cors());
-app.use(express.json()); // To parse JSON bodies
+app.use(express.json());
 
-// --- API Routes ---
-// This is a placeholder for your prediction logic
+const toPercentage = (value) => `${Math.round(value * 100)}%`;
+
+const scoreRisk = ({ age, mmse, cdr, apoe4Positive }) => {
+  let score = 0.1;
+  const keyFactors = [];
+
+  if (age >= 75) {
+    score += 0.2;
+    keyFactors.push('Advanced age profile');
+  } else if (age >= 65) {
+    score += 0.12;
+    keyFactors.push('Age-related neurodegeneration risk');
+  }
+
+  if (mmse <= 18) {
+    score += 0.35;
+    keyFactors.push('Low MMSE cognitive performance');
+  } else if (mmse <= 24) {
+    score += 0.2;
+    keyFactors.push('Borderline MMSE result');
+  }
+
+  if (cdr >= 2) {
+    score += 0.3;
+    keyFactors.push('Elevated CDR severity');
+  } else if (cdr >= 1) {
+    score += 0.2;
+    keyFactors.push('Mild dementia markers (CDR)');
+  } else if (cdr === 0.5) {
+    score += 0.1;
+    keyFactors.push('Very mild CDR impairment');
+  }
+
+  if (apoe4Positive) {
+    score += 0.15;
+    keyFactors.push('APOE4 genetic marker detected');
+  }
+
+  const clampedScore = Math.max(0, Math.min(score, 0.98));
+  const confidence = 0.7 + (clampedScore * 0.25);
+
+  let riskBand = 'Low';
+  let recommendation = 'Maintain annual screening and continue healthy cognitive lifestyle interventions.';
+
+  if (clampedScore >= 0.7) {
+    riskBand = 'High';
+    recommendation = 'Recommend specialist referral, confirmatory imaging, and close follow-up every 3-6 months.';
+  } else if (clampedScore >= 0.4) {
+    riskBand = 'Moderate';
+    recommendation = 'Recommend deeper neurocognitive testing and follow-up risk assessment within 6 months.';
+  }
+
+  return {
+    riskScore: Number(clampedScore.toFixed(2)),
+    confidence: toPercentage(confidence),
+    riskBand,
+    keyFactors: keyFactors.length ? keyFactors : ['No high-risk features detected in submitted data'],
+    recommendation,
+  };
+};
+
 app.post('/api/predict', (req, res) => {
-    // In a real app, you would take req.body data,
-    // process it, and send it to your Python ML model.
-    console.log('Received data:', req.body);
+  const { patientId, age, mmse, cdr, apoe4Positive } = req.body;
 
-    // For now, we'll just send back a mock result.
-    const mockPrediction = {
-        patientId: req.body.patientId,
-        riskScore: Math.random().toFixed(2), // Random score between 0 and 1
-        confidence: '88%',
-        keyFactors: ['Hippocampal Volume', 'MMSE Score'],
-    };
+  if (!patientId || Number.isNaN(Number(age)) || Number.isNaN(Number(mmse)) || Number.isNaN(Number(cdr))) {
+    return res.status(400).json({ error: 'Missing or invalid patient fields.' });
+  }
 
-    res.json(mockPrediction);
+  const prediction = scoreRisk({
+    age: Number(age),
+    mmse: Number(mmse),
+    cdr: Number(cdr),
+    apoe4Positive: Boolean(apoe4Positive),
+  });
+
+  return res.json({
+    patientId,
+    ...prediction,
+  });
 });
 
-// Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
