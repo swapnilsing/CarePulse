@@ -1,75 +1,182 @@
-/* client/src/App.css */
+:root {
+  --bg: #f3f6fb;
+  --panel: #ffffff;
+  --text: #12213a;
+  --muted: #4f617d;
+  --primary: #2f6fed;
+  --primary-dark: #2357bd;
+  --success: #0f9d58;
+  --danger: #c0392b;
+  --border: #dce4f2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f4f7f9;
-  color: #333;
   margin: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at 10% 10%, #ffffff 0%, var(--bg) 65%);
+  color: var(--text);
 }
 
-.App {
-  text-align: center;
-}
-
-.App-header {
-  background-color: #2c3e50;
-  padding: 20px;
-  color: white;
-  margin-bottom: 30px;
-}
-
-.form-container {
-  max-width: 600px;
+.app-shell {
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem 1rem 3rem;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero-eyebrow {
+  margin: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.hero h1 {
+  margin: 0.5rem 0;
+  font-size: clamp(1.8rem, 2.5vw, 2.6rem);
+}
+
+.hero-subtitle {
+  margin: 0 auto;
+  max-width: 760px;
+  color: var(--muted);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 4px 14px rgba(22, 34, 65, 0.05);
+}
+
+.feature-card h2 {
+  margin-top: 0;
+  font-size: 1.05rem;
+}
+
+.feature-card p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.workflow,
+.form-container {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 14px rgba(22, 34, 65, 0.05);
+}
+
+.workflow {
+  margin-bottom: 1.5rem;
+}
+
+.workflow h2,
+.form-container h2 {
+  margin-top: 0;
+}
+
+.workflow ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  display: grid;
+  gap: 0.65rem;
+}
+
+.form-intro {
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
 }
 
 .form-group {
-  margin-bottom: 20px;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
-.form-group input {
-  width: 95%;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+.form-group input,
+.form-group select {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 0.7rem;
+  font-size: 0.95rem;
+}
+
+.checkbox-row {
+  margin: 1rem 0;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkbox-row label {
+  font-weight: 500;
 }
 
 button {
   width: 100%;
-  padding: 12px;
-  background-color: #3498db;
+  background: var(--primary);
   color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #2980b9;
+button:hover:enabled {
+  background: var(--primary-dark);
 }
 
-.results {
-  margin-top: 30px;
-  padding: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background-color: #fafafa;
-  text-align: left;
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .error {
-  color: #e74c3c;
-  margin-top: 15px;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.results {
+  margin-top: 1.2rem;
+  border: 1px solid #d7e8de;
+  border-radius: 10px;
+  padding: 1rem;
+  background: #f2fbf5;
+}
+
+.results h3 {
+  margin-top: 0;
+  color: var(--success);
 }
