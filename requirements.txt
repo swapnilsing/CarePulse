@@ -1,0 +1,9 @@
+flask
+tensorflow-cpu==2.16.1
+pillow
+numpy
+google-genai
+python-dotenv
+groq
+opencv-python
+pymongo
